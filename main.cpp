@@ -39,6 +39,8 @@ int main() {
   cout << "Enter the column size of an array: ";
   cin >> colSize;
 
+  cout << "\n";
+
   if (colSize < 1 || cin.fail()) {
     cout << "Please enter a valid column size!\n";
     return 1;
@@ -91,7 +93,11 @@ int main() {
         primeN++;
       }
     }
+
+    cout << "\n";
   }
+
+  cout << "\n";
 
   // Display the array content
   cout << "Array Content\n";
