@@ -28,33 +28,36 @@ int main() {
   int rowSize, colSize;
 
   // Read matrix size
-  cout << "Enter the row size of an array: ";
-  cin >> rowSize;
+  while (rowSize != colSize) {
+    cout << "Enter the row size of an array: ";
+    cin >> rowSize;
 
-  if (rowSize < 1 || cin.fail()) {
-    cout << "Please enter a valid row size!\n";
-    return 1;
-  }
+    if (rowSize < 1 || cin.fail()) {
+      cout << "Please enter a valid row size!\n";
+      continue;
+    }
 
-  cout << "Enter the column size of an array: ";
-  cin >> colSize;
+    cout << "Enter the column size of an array: ";
+    cin >> colSize;
 
-  cout << "\n";
+    cout << "\n";
 
-  if (colSize < 1 || cin.fail()) {
-    cout << "Please enter a valid column size!\n";
-    return 1;
-  }
+    if (colSize < 1 || cin.fail()) {
+      cout << "Please enter a valid column size!\n";
+      continue;
+    }
 
-  // Square matrix check
-  if (rowSize != colSize) {
-    cout << "Oops! The size of the row and column must be equal!\n";
-    return 1;
+    // Square matrix check
+    if (rowSize == colSize)
+      break;
+    else
+      cout << "Oops! The size of the row and column must be equal!\n";
   }
 
   // Initialize the 2-Dimensional array or the matrix
+  // NOTE: Only do this if the editor and compiler allows you to
   int matrix[rowSize][colSize];
-  // Or
+  // Otherwise, use
   //   int **matrix = new int *[rowSize];
   //   for (int i = 0; i < rowSize; i++)
   //     matrix[i] = new int[colSize];
@@ -62,6 +65,7 @@ int main() {
   //   int **matrix = (int **)malloc(sizeof(int *) * rowSize);
   //   for (int i = 0; i < rowSize; i++)
   //     matrix[i] = (int *)malloc(sizeof(int) * colSize);
+  // Or potentially a dynamic array or vector
 
   int diagonalSum = 0, antiDiagonalSum = 0, primeSum = 0, primeN = 0;
 
@@ -77,22 +81,19 @@ int main() {
 
       matrix[i][j] = n;
 
-      // Calculate diagonal and anti-diagonal sums, and the average of prime
-      // numbers
-
-      // Check if the current cell is part of the diagonal orientation
-      if (i == j)
-        diagonalSum += n;
-
-      // Check if the current cell is part of the anti diagonal orientation
-      if (j == rowSize - (i + 1))
-        antiDiagonalSum += n;
-
       if (isPrime(n)) {
         primeSum += n;
         primeN++;
       }
     }
+
+    // Cells at every [i][i] will be part of the diagonal orientation. Hence,
+    // add it to the sum
+    diagonalSum += matrix[i][i];
+
+    // Cells at [i][rowSize - i + 1] (row and column are opposite) will be part
+    // of the anti-diagonal orientation. Hence, add it to the sum
+    antiDiagonalSum += matrix[i][rowSize - (i + 1)];
 
     cout << "\n";
   }
@@ -104,7 +105,6 @@ int main() {
 
   for (int i = 0; i < rowSize; i++) {
     for (int j = 0; j < colSize; j++) {
-
       cout << matrix[i][j] << "\t";
     }
 
@@ -118,8 +118,11 @@ int main() {
   cout << "The sum of anti-diagonal is: " << antiDiagonalSum << "\n";
 
   // Display the average of the prime numbers
-  cout << "The average of prime numbers: " << (float)(primeSum) / primeN
-       << "\n\n";
+  if (primeN)
+    cout << "The average of prime numbers: " << (float)(primeSum) / primeN
+         << "\n\n";
+  else
+    cout << "No prime numbers found within the matrix!";
 
   // Display the transposed matrix
   cout << "Transpose Matrix\n";
